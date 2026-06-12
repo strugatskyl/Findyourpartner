@@ -104,6 +104,11 @@ const DICT = {
     dateLabel: "Дата",
     yourProfileLabel: "Ваш профиль",
     partnerProfileLabel: "Профиль партнёра",
+    // pwa
+    installApp: "Установить",
+    installAppText: "Добавьте Find Your Partner на главный экран — как обычное приложение.",
+    installIosHint:
+      "Чтобы установить как приложение: нажмите «Поделиться» ⬆️ внизу Safari, затем «На экран “Домой”».",
     // errors
     unknownError: "Неизвестная ошибка",
     errorGeneric: "Ошибка",
@@ -200,6 +205,11 @@ const DICT = {
     dateLabel: "Date",
     yourProfileLabel: "Your profile",
     partnerProfileLabel: "Partner's profile",
+    // pwa
+    installApp: "Install",
+    installAppText: "Add Find Your Partner to your home screen — like a regular app.",
+    installIosHint:
+      "To install as an app: tap Share ⬆️ at the bottom of Safari, then 'Add to Home Screen'.",
     // errors
     unknownError: "Unknown error",
     errorGeneric: "Error",

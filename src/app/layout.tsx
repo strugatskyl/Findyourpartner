@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import PwaSetup from "@/components/PwaSetup";
 import { LangProvider } from "@/lib/i18n";
 import "./globals.css";
 
@@ -7,6 +8,18 @@ export const metadata: Metadata = {
   title: "Find Your Partner",
   description:
     "Оценка совместимости пары через разные методологии — научные, психологические, мистические. / Couple compatibility through scientific, psychological and mystical lenses.",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "FindPartner",
+  },
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
@@ -31,6 +44,7 @@ export default function RootLayout({
             </div>
             {children}
           </div>
+          <PwaSetup />
         </LangProvider>
       </body>
     </html>
