@@ -8,6 +8,7 @@ import InputModeToggle, { type InputMode } from "@/components/InputModeToggle";
 import MethodologyPicker from "@/components/MethodologyPicker";
 import ProfileCard from "@/components/ProfileCard";
 import Questionnaire from "@/components/Questionnaire";
+import ReportActions from "@/components/ReportActions";
 import UploadArea from "@/components/UploadArea";
 import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
 import { useLang } from "@/lib/i18n";
@@ -241,6 +242,12 @@ function CompareInner() {
           <CompatibilityReportView
             methodologyId={methodologyId}
             report={report.data}
+          />
+          <ReportActions
+            methodologyId={methodologyId}
+            report={report.data}
+            self={self.data}
+            partner={partner.data}
           />
           <div className="grid gap-4 sm:grid-cols-2">
             <ProfileCard

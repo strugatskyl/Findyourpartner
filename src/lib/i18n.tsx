@@ -95,6 +95,16 @@ const DICT = {
     questionnaireSubmitHeader: "Ответы на анкету:",
     questionLabel: "Вопрос",
     answerLabel: "Ответ",
+    // report actions
+    downloadReport: "💾 Скачать отчёт",
+    copyReport: "📋 Скопировать текстом",
+    shareReport: "📤 Поделиться",
+    reportCopied: "Скопировано!",
+    reportTitle: "Find Your Partner — отчёт о совместимости",
+    methodologyLabel: "Методология",
+    dateLabel: "Дата",
+    yourProfileLabel: "Ваш профиль",
+    partnerProfileLabel: "Профиль партнёра",
     // errors
     unknownError: "Неизвестная ошибка",
     errorGeneric: "Ошибка",
@@ -182,6 +192,16 @@ const DICT = {
     questionnaireSubmitHeader: "Questionnaire answers:",
     questionLabel: "Question",
     answerLabel: "Answer",
+    // report actions
+    downloadReport: "💾 Download report",
+    copyReport: "📋 Copy as text",
+    shareReport: "📤 Share",
+    reportCopied: "Copied!",
+    reportTitle: "Find Your Partner — compatibility report",
+    methodologyLabel: "Methodology",
+    dateLabel: "Date",
+    yourProfileLabel: "Your profile",
+    partnerProfileLabel: "Partner's profile",
     // errors
     unknownError: "Unknown error",
     errorGeneric: "Error",
