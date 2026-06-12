@@ -1,12 +1,17 @@
 "use client";
 
-import { METHODOLOGIES } from "@/lib/methodologies";
+import {
+  METHODOLOGIES,
+  getMethodologyBlurb,
+  getMethodologyName,
+} from "@/lib/methodologies";
 import type { Category } from "@/lib/methodologies/types";
+import { useLang, type DictKey } from "@/lib/i18n";
 
-const CATEGORY_LABELS: Record<Category, { label: string; color: string }> = {
-  science: { label: "Научно", color: "text-green-300 border-green-400/40" },
-  psychology: { label: "Психология", color: "text-blue-300 border-blue-400/40" },
-  mysticism: { label: "Мистика", color: "text-purple-300 border-purple-400/40" },
+const CATEGORY_META: Record<Category, { key: DictKey; color: string }> = {
+  science: { key: "catScience", color: "text-green-300 border-green-400/40" },
+  psychology: { key: "catPsychology", color: "text-blue-300 border-blue-400/40" },
+  mysticism: { key: "catMysticism", color: "text-purple-300 border-purple-400/40" },
 };
 
 interface MethodologyPickerProps {
@@ -20,13 +25,15 @@ export default function MethodologyPicker({
   onSelect,
   availableForCompare,
 }: MethodologyPickerProps) {
+  const { lang, t } = useLang();
+
   return (
     <div className="grid grid-cols-1 gap-3">
       {METHODOLOGIES.map((m) => {
         const isSelected = selected === m.id;
         const isAvailable =
           !availableForCompare || availableForCompare.includes(m.id);
-        const cat = CATEGORY_LABELS[m.category];
+        const cat = CATEGORY_META[m.category];
         return (
           <button
             key={m.id}
@@ -42,18 +49,20 @@ export default function MethodologyPicker({
             }`}
           >
             <div className="mb-2 flex items-center justify-between gap-2">
-              <h3 className="font-serif text-lg text-[#f3ede4]">{m.ru}</h3>
+              <h3 className="font-serif text-lg text-[#f3ede4]">
+                {getMethodologyName(m, lang)}
+              </h3>
               <span
                 className={`shrink-0 rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider ${cat.color}`}
               >
-                {cat.label}
+                {t(cat.key)}
               </span>
             </div>
-            <p className="text-sm text-[#f3ede4]/70">{m.blurb}</p>
+            <p className="text-sm text-[#f3ede4]/70">
+              {getMethodologyBlurb(m, lang)}
+            </p>
             {!isAvailable && (
-              <p className="mt-2 text-xs text-muted">
-                Сначала постройте свой профиль через эту методологию
-              </p>
+              <p className="mt-2 text-xs text-muted">{t("needFirstProfile")}</p>
             )}
           </button>
         );

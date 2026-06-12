@@ -1,7 +1,12 @@
 "use client";
 
-import { getAxisLabel, getMethodology } from "@/lib/methodologies";
+import {
+  getAxisLabel,
+  getMethodology,
+  getMethodologyName,
+} from "@/lib/methodologies";
 import type { ReportData } from "@/lib/methodologies/shared-schema";
+import { useLang } from "@/lib/i18n";
 
 interface ReportProps {
   methodologyId: string;
@@ -12,6 +17,7 @@ export default function CompatibilityReportView({
   methodologyId,
   report,
 }: ReportProps) {
+  const { lang, t } = useLang();
   const methodology = getMethodology(methodologyId);
   const score = Math.round(report.overall_score);
   const scoreColor =
@@ -25,10 +31,12 @@ export default function CompatibilityReportView({
     <div className="space-y-5">
       <div className="rounded-2xl bg-surface p-6 text-center">
         <div className="mb-1 text-sm uppercase tracking-wider text-muted">
-          Совместимость
+          {t("compatibility")}
         </div>
         {methodology && (
-          <div className="mb-2 text-xs text-muted">через {methodology.ru}</div>
+          <div className="mb-2 text-xs text-muted">
+            {t("via", { m: getMethodologyName(methodology, lang) })}
+          </div>
         )}
         <div className={`text-6xl font-serif ${scoreColor}`}>{score}</div>
         <div className="mt-3 text-sm leading-relaxed text-[#f3ede4]/90">
@@ -37,7 +45,7 @@ export default function CompatibilityReportView({
       </div>
 
       <div className="rounded-2xl bg-surface p-5">
-        <h3 className="mb-3 text-lg text-accent">По осям</h3>
+        <h3 className="mb-3 text-lg text-accent">{t("byAxes")}</h3>
         <div className="space-y-3">
           {report.axis_alignment.map((f) => {
             const delta = Math.round(f.delta);
@@ -45,7 +53,7 @@ export default function CompatibilityReportView({
             return (
               <div key={f.axis}>
                 <div className="mb-1 flex justify-between text-sm">
-                  <span>{getAxisLabel(methodologyId, f.axis)}</span>
+                  <span>{getAxisLabel(methodologyId, f.axis, lang)}</span>
                   <span className="text-muted">
                     {delta > 0 ? "+" : ""}
                     {delta}
@@ -68,10 +76,10 @@ export default function CompatibilityReportView({
         </div>
       </div>
 
-      <Section title="Сильные стороны" items={report.strengths} accent="green" />
-      <Section title="Зоны риска" items={report.risks} accent="red" />
+      <Section title={t("strengths")} items={report.strengths} accent="green" />
+      <Section title={t("risks")} items={report.risks} accent="red" />
       <Section
-        title="О чём поговорить"
+        title={t("talkAbout")}
         items={report.conversation_starters}
         accent="neutral"
       />

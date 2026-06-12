@@ -2,12 +2,12 @@ import type { MethodologySpec } from "./types";
 import { makeAnalyzeTool, makeCompareTool, type AxisDef } from "./shared-schema";
 
 export const MFT_AXES: AxisDef[] = [
-  { key: "care", ru: "Забота", hint: "эмпатия, защита уязвимых" },
-  { key: "fairness", ru: "Справедливость", hint: "равенство, взаимность" },
-  { key: "loyalty", ru: "Лояльность", hint: "приверженность «своим»" },
-  { key: "authority", ru: "Авторитет", hint: "уважение к традиции, опыту" },
-  { key: "sanctity", ru: "Чистота", hint: "телесная/духовная чистота, святыни" },
-  { key: "liberty", ru: "Свобода", hint: "автономия, неприятие принуждения" },
+  { key: "care", ru: "Забота", en: "Care", hint: "эмпатия, защита уязвимых" },
+  { key: "fairness", ru: "Справедливость", en: "Fairness", hint: "равенство, взаимность" },
+  { key: "loyalty", ru: "Лояльность", en: "Loyalty", hint: "приверженность «своим»" },
+  { key: "authority", ru: "Авторитет", en: "Authority", hint: "уважение к традиции, опыту" },
+  { key: "sanctity", ru: "Чистота", en: "Sanctity", hint: "телесная/духовная чистота, святыни" },
+  { key: "liberty", ru: "Свобода", en: "Liberty", hint: "автономия, неприятие принуждения" },
 ];
 
 const ANALYZE = `Ты — психолог-аналитик, специализирующийся на Moral Foundations Theory (Дж. Хайдт).
@@ -36,9 +36,12 @@ export const mft: MethodologySpec = {
   id: "mft",
   name: "Moral Foundations Theory",
   ru: "Моральные основания (Хайдт)",
+  en: "Moral Foundations (Haidt)",
   category: "science",
   blurb:
     "Совместимость через 6 моральных оснований по Дж. Хайдту: забота, справедливость, лояльность, авторитет, чистота, свобода.",
+  blurbEn:
+    "Compatibility through J. Haidt's 6 moral foundations: care, fairness, loyalty, authority, sanctity, liberty.",
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     MFT_AXES,

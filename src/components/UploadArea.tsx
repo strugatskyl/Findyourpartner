@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useLang } from "@/lib/i18n";
 
 interface UploadAreaProps {
   onSubmit: (text: string, images: File[]) => Promise<void>;
@@ -12,9 +13,10 @@ interface UploadAreaProps {
 export default function UploadArea({
   onSubmit,
   busy,
-  cta = "Анализировать",
-  placeholder = "Вставьте сюда тексты, переписки, сообщения…",
+  cta,
+  placeholder,
 }: UploadAreaProps) {
+  const { t } = useLang();
   const [text, setText] = useState("");
   const [images, setImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -40,7 +42,7 @@ export default function UploadArea({
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        placeholder={placeholder}
+        placeholder={placeholder ?? t("defaultPlaceholder")}
         rows={8}
         disabled={busy}
         className="w-full resize-y rounded-xl bg-surface p-4 text-base leading-relaxed text-[#f3ede4] placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-50"
@@ -61,7 +63,7 @@ export default function UploadArea({
                 onClick={() => removeImage(i)}
                 disabled={busy}
                 className="text-muted hover:text-accent disabled:opacity-50"
-                aria-label="Удалить"
+                aria-label={t("remove")}
               >
                 ×
               </button>
@@ -114,7 +116,7 @@ export default function UploadArea({
           disabled={busy}
           className="flex-1 rounded-xl border border-muted/40 bg-transparent px-4 py-3 text-sm text-[#f3ede4] hover:border-accent disabled:opacity-50"
         >
-          📎 Файл (.txt / фото)
+          {t("fileBtn")}
         </button>
         <button
           type="button"
@@ -122,7 +124,7 @@ export default function UploadArea({
           disabled={busy}
           className="flex-1 rounded-xl border border-muted/40 bg-transparent px-4 py-3 text-sm text-[#f3ede4] hover:border-accent disabled:opacity-50 sm:hidden"
         >
-          📷 Снять переписку
+          {t("cameraBtn")}
         </button>
       </div>
 
@@ -132,7 +134,7 @@ export default function UploadArea({
         disabled={busy || (!text.trim() && images.length === 0)}
         className="rounded-xl bg-accent px-4 py-4 text-base font-medium text-background hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {busy ? "Анализирую…" : cta}
+        {busy ? t("analyzing") : (cta ?? t("analyze"))}
       </button>
     </div>
   );

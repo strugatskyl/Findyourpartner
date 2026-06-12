@@ -7,7 +7,8 @@ import CompatibilityReportView from "@/components/CompatibilityReport";
 import MethodologyPicker from "@/components/MethodologyPicker";
 import ProfileCard from "@/components/ProfileCard";
 import UploadArea from "@/components/UploadArea";
-import { METHODOLOGIES } from "@/lib/methodologies";
+import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
+import { useLang } from "@/lib/i18n";
 import {
   listMyMethodologies,
   loadProfile,
@@ -30,6 +31,7 @@ interface StoredReport {
 }
 
 function CompareInner() {
+  const { lang, t } = useLang();
   const searchParams = useSearchParams();
   const initialId = searchParams.get("m");
 
@@ -65,11 +67,12 @@ function CompareInner() {
       const fd = new FormData();
       fd.append("methodology_id", methodologyId);
       fd.append("text", text);
+      fd.append("lang", lang);
       images.forEach((img) => fd.append("images", img));
 
       const res = await fetch("/api/analyze", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Ошибка");
+      if (!res.ok) throw new Error(data.error ?? t("errorGeneric"));
 
       const partnerProfile = data.profile as StoredProfile;
       setPartner(partnerProfile);
@@ -81,13 +84,14 @@ function CompareInner() {
           methodology_id: methodologyId,
           self: self.data,
           partner: partnerProfile.data,
+          lang,
         }),
       });
       const cmpData = await cmpRes.json();
-      if (!cmpRes.ok) throw new Error(cmpData.error ?? "Ошибка сравнения");
+      if (!cmpRes.ok) throw new Error(cmpData.error ?? t("compareError"));
       setReport(cmpData.report as StoredReport);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Неизвестная ошибка");
+      setError(e instanceof Error ? e.message : t("unknownError"));
     } finally {
       setBusy(false);
     }
@@ -105,18 +109,17 @@ function CompareInner() {
     return (
       <main className="flex flex-col gap-4">
         <Link href="/" className="text-sm text-muted hover:text-accent">
-          ← На главную
+          {t("backHome")}
         </Link>
-        <h1 className="font-serif text-2xl text-accent">Сначала ваш профиль</h1>
-        <p className="text-[#f3ede4]/80">
-          Чтобы сравнить кого-то с вами, сначала постройте хотя бы один
-          собственный профиль.
-        </p>
+        <h1 className="font-serif text-2xl text-accent">
+          {t("firstProfileTitle")}
+        </h1>
+        <p className="text-[#f3ede4]/80">{t("firstProfileText")}</p>
         <Link
           href="/profile"
           className="rounded-xl bg-accent px-4 py-4 text-center text-base font-medium text-background hover:bg-accent/90"
         >
-          Создать мой профиль →
+          {t("createProfile")}
         </Link>
       </main>
     );
@@ -129,15 +132,12 @@ function CompareInner() {
       <main className="flex flex-col gap-6">
         <header>
           <Link href="/profile" className="text-sm text-muted hover:text-accent">
-            ← К моему профилю
+            {t("toMyProfile")}
           </Link>
           <h1 className="mt-2 font-serif text-2xl text-accent sm:text-3xl">
-            Через какую призму смотрим?
+            {t("whichLens")}
           </h1>
-          <p className="mt-2 text-sm text-[#f3ede4]/80">
-            Сравнение работает только в методологиях, через которые вы уже
-            построили свой профиль.
-          </p>
+          <p className="mt-2 text-sm text-[#f3ede4]/80">{t("lensOnlyBuilt")}</p>
         </header>
         <MethodologyPicker
           selected={methodologyId}
@@ -152,10 +152,10 @@ function CompareInner() {
     <main className="flex flex-col gap-6">
       <header>
         <Link href="/profile" className="text-sm text-muted hover:text-accent">
-          ← К моему профилю
+          {t("toMyProfile")}
         </Link>
         <h1 className="mt-2 font-serif text-2xl text-accent sm:text-3xl">
-          Совместимость
+          {t("compatTitle")}
         </h1>
         {selectedMethodology && (
           <button
@@ -166,7 +166,9 @@ function CompareInner() {
             }}
             className="mt-1 text-sm text-muted hover:text-accent"
           >
-            ← Сменить методологию ({selectedMethodology.ru})
+            {t("changeMethodology", {
+              m: getMethodologyName(selectedMethodology, lang),
+            })}
           </button>
         )}
       </header>
@@ -179,15 +181,12 @@ function CompareInner() {
 
       {!report && (
         <>
-          <p className="text-sm text-[#f3ede4]/80">
-            Загрузите тексты или скриншоты переписок партнёра. ИИ построит его
-            профиль через ту же призму и сравнит с вашим.
-          </p>
+          <p className="text-sm text-[#f3ede4]/80">{t("partnerHint")}</p>
           <UploadArea
             onSubmit={analyzePartner}
             busy={busy}
-            cta="Проанализировать и сравнить"
-            placeholder="Вставьте сюда тексты партнёра…"
+            cta={t("analyzeCompare")}
+            placeholder={t("partnerPlaceholder")}
           />
         </>
       )}
@@ -202,12 +201,12 @@ function CompareInner() {
             <ProfileCard
               methodologyId={methodologyId}
               profile={self.data}
-              title="Вы"
+              title={t("you")}
             />
             <ProfileCard
               methodologyId={methodologyId}
               profile={partner.data}
-              title="Партнёр"
+              title={t("partner")}
             />
           </div>
           <button
@@ -215,7 +214,7 @@ function CompareInner() {
             onClick={reset}
             className="rounded-xl border border-muted/40 px-4 py-3 text-sm text-[#f3ede4] hover:border-accent"
           >
-            Проверить другого человека
+            {t("checkAnother")}
           </button>
         </>
       )}

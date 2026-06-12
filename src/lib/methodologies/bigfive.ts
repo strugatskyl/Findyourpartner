@@ -2,11 +2,11 @@ import type { MethodologySpec } from "./types";
 import { makeAnalyzeTool, makeCompareTool, type AxisDef } from "./shared-schema";
 
 export const BIGFIVE_AXES: AxisDef[] = [
-  { key: "openness", ru: "Открытость", hint: "интерес к новому, любознательность" },
-  { key: "conscientiousness", ru: "Добросовестность", hint: "организованность, ответственность" },
-  { key: "extraversion", ru: "Экстраверсия", hint: "энергия из общения с людьми" },
-  { key: "agreeableness", ru: "Доброжелательность", hint: "склонность к сотрудничеству, доверию" },
-  { key: "neuroticism", ru: "Нейротизм", hint: "эмоциональная нестабильность, тревожность" },
+  { key: "openness", ru: "Открытость", en: "Openness", hint: "интерес к новому, любознательность" },
+  { key: "conscientiousness", ru: "Добросовестность", en: "Conscientiousness", hint: "организованность, ответственность" },
+  { key: "extraversion", ru: "Экстраверсия", en: "Extraversion", hint: "энергия из общения с людьми" },
+  { key: "agreeableness", ru: "Доброжелательность", en: "Agreeableness", hint: "склонность к сотрудничеству, доверию" },
+  { key: "neuroticism", ru: "Нейротизм", en: "Neuroticism", hint: "эмоциональная нестабильность, тревожность" },
 ];
 
 const ANALYZE = `Ты — психолог-аналитик, использующий модель Big Five (OCEAN).
@@ -38,9 +38,12 @@ export const bigfive: MethodologySpec = {
   id: "bigfive",
   name: "Big Five (OCEAN)",
   ru: "Большая Пятёрка",
+  en: "Big Five (OCEAN)",
   category: "science",
   blurb:
     "5 базовых черт личности: открытость, добросовестность, экстраверсия, доброжелательность, нейротизм. Самая исследованная модель в современной психологии.",
+  blurbEn:
+    "5 core personality traits: openness, conscientiousness, extraversion, agreeableness, neuroticism. The most researched model in modern psychology.",
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     BIGFIVE_AXES,

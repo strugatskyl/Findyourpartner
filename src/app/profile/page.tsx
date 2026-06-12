@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import MethodologyPicker from "@/components/MethodologyPicker";
 import ProfileCard from "@/components/ProfileCard";
 import UploadArea from "@/components/UploadArea";
-import { METHODOLOGIES } from "@/lib/methodologies";
+import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
+import { useLang } from "@/lib/i18n";
 import {
   clearAll,
   loadProfile,
@@ -14,6 +15,7 @@ import {
 } from "@/lib/profile-store";
 
 export default function ProfilePage() {
+  const { lang, t } = useLang();
   const [methodologyId, setMethodologyId] = useState<string | null>(null);
   const [profile, setProfile] = useState<StoredProfile | null>(null);
   const [busy, setBusy] = useState(false);
@@ -44,25 +46,26 @@ export default function ProfilePage() {
       const fd = new FormData();
       fd.append("methodology_id", methodologyId);
       fd.append("text", text);
+      fd.append("lang", lang);
       images.forEach((img) => fd.append("images", img));
 
       const res = await fetch("/api/analyze", { method: "POST", body: fd });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Ошибка");
+      if (!res.ok) throw new Error(data.error ?? t("errorGeneric"));
 
       const stored = data.profile as StoredProfile;
       await saveProfile("me", methodologyId, stored);
       setProfile(stored);
       setStep("result");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Неизвестная ошибка");
+      setError(e instanceof Error ? e.message : t("unknownError"));
     } finally {
       setBusy(false);
     }
   }
 
   async function handleClearAll() {
-    if (!confirm("Удалить ВСЕ ваши профили из браузера?")) return;
+    if (!confirm(t("confirmClear"))) return;
     await clearAll();
     setProfile(null);
     setMethodologyId(null);
@@ -75,10 +78,10 @@ export default function ProfilePage() {
     <main className="flex flex-col gap-6">
       <header>
         <Link href="/" className="text-sm text-muted hover:text-accent">
-          ← На главную
+          {t("backHome")}
         </Link>
         <h1 className="mt-2 font-serif text-2xl text-accent sm:text-3xl">
-          Мой профиль
+          {t("myProfile")}
         </h1>
         {step !== "pick" && selectedMethodology && (
           <button
@@ -89,7 +92,9 @@ export default function ProfilePage() {
             }}
             className="mt-1 text-sm text-muted hover:text-accent"
           >
-            ← Сменить методологию ({selectedMethodology.ru})
+            {t("changeMethodology", {
+              m: getMethodologyName(selectedMethodology, lang),
+            })}
           </button>
         )}
       </header>
@@ -102,10 +107,7 @@ export default function ProfilePage() {
 
       {step === "pick" && (
         <>
-          <p className="text-sm text-[#f3ede4]/80">
-            Выберите «линзу», через которую ИИ будет смотреть на ваши тексты.
-            Можно построить несколько профилей в разных методологиях.
-          </p>
+          <p className="text-sm text-[#f3ede4]/80">{t("pickLensText")}</p>
           <MethodologyPicker
             selected={methodologyId}
             onSelect={(id) => setMethodologyId(id)}
@@ -115,16 +117,12 @@ export default function ProfilePage() {
 
       {step === "upload" && methodologyId && (
         <>
-          <p className="text-sm text-[#f3ede4]/80">
-            Загрузите ваши собственные тексты или сообщения. Чем больше
-            материала — тем точнее анализ. Минимум ~300 слов или несколько
-            скриншотов.
-          </p>
+          <p className="text-sm text-[#f3ede4]/80">{t("uploadHint")}</p>
           <UploadArea
             onSubmit={handleAnalyze}
             busy={busy}
-            cta="Построить мой профиль"
-            placeholder="Вставьте свои сообщения, эссе, посты, переписки…"
+            cta={t("buildProfile")}
+            placeholder={t("selfPlaceholder")}
           />
         </>
       )}
@@ -134,32 +132,32 @@ export default function ProfilePage() {
           <ProfileCard
             methodologyId={methodologyId}
             profile={profile.data}
-            title="Ваш профиль"
+            title={t("yourProfile")}
           />
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Link
               href={`/compare?m=${methodologyId}`}
               className="rounded-xl bg-accent px-4 py-4 text-center text-base font-medium text-background hover:bg-accent/90"
             >
-              Проверить совместимость →
+              {t("checkCompat")}
             </Link>
             <button
               type="button"
               onClick={handleClearAll}
               className="rounded-xl border border-muted/40 px-4 py-4 text-base text-[#f3ede4] hover:border-red-400 hover:text-red-300"
             >
-              Очистить мои данные
+              {t("clearData")}
             </button>
           </div>
           <details className="rounded-xl border border-muted/30 p-4 text-sm">
             <summary className="cursor-pointer text-muted hover:text-accent">
-              Пересоздать профиль на новых текстах
+              {t("recreateProfile")}
             </summary>
             <div className="mt-4">
               <UploadArea
                 onSubmit={handleAnalyze}
                 busy={busy}
-                cta="Проанализировать заново"
+                cta={t("reanalyze")}
               />
             </div>
           </details>

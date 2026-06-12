@@ -1,7 +1,12 @@
 "use client";
 
-import { getAxes, getMethodology } from "@/lib/methodologies";
+import {
+  getAxes,
+  getMethodology,
+  getMethodologyName,
+} from "@/lib/methodologies";
 import type { ProfileData } from "@/lib/methodologies/shared-schema";
+import { useLang } from "@/lib/i18n";
 
 interface ProfileCardProps {
   methodologyId: string;
@@ -14,10 +19,14 @@ export default function ProfileCard({
   profile,
   title,
 }: ProfileCardProps) {
+  const { lang, t } = useLang();
   const methodology = getMethodology(methodologyId);
   const axes = getAxes(methodologyId);
-  const axisLabel = (key: string) =>
-    axes.find((a) => a.key === key)?.ru ?? key;
+  const axisLabel = (key: string) => {
+    const axis = axes.find((a) => a.key === key);
+    if (!axis) return key;
+    return lang === "en" ? axis.en : axis.ru;
+  };
   const axisHint = (key: string) =>
     axes.find((a) => a.key === key)?.hint ?? "";
 
@@ -28,7 +37,7 @@ export default function ProfileCard({
       )}
       {methodology && (
         <div className="mb-4 text-xs uppercase tracking-wider text-muted">
-          {methodology.ru}
+          {getMethodologyName(methodology, lang)}
         </div>
       )}
 
@@ -58,7 +67,7 @@ export default function ProfileCard({
       {profile.quotes.length > 0 && (
         <details className="mt-4 text-sm">
           <summary className="cursor-pointer text-muted hover:text-accent">
-            Цитаты-обоснования ({profile.quotes.length})
+            {t("quotes", { n: profile.quotes.length })}
           </summary>
           <ul className="mt-2 space-y-2 text-[#f3ede4]/80">
             {profile.quotes.map((q, i) => (

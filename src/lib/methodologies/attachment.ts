@@ -2,10 +2,10 @@ import type { MethodologySpec } from "./types";
 import { makeAnalyzeTool, makeCompareTool, type AxisDef } from "./shared-schema";
 
 export const ATTACHMENT_AXES: AxisDef[] = [
-  { key: "secure", ru: "Надёжный", hint: "комфорт с близостью и автономией" },
-  { key: "anxious", ru: "Тревожный", hint: "страх отвержения, поглощение партнёром" },
-  { key: "avoidant", ru: "Избегающий", hint: "дистанция, недоверие к близости" },
-  { key: "disorganized", ru: "Дезорганизованный", hint: "хочу — боюсь близости" },
+  { key: "secure", ru: "Надёжный", en: "Secure", hint: "комфорт с близостью и автономией" },
+  { key: "anxious", ru: "Тревожный", en: "Anxious", hint: "страх отвержения, поглощение партнёром" },
+  { key: "avoidant", ru: "Избегающий", en: "Avoidant", hint: "дистанция, недоверие к близости" },
+  { key: "disorganized", ru: "Дезорганизованный", en: "Disorganized", hint: "хочу — боюсь близости" },
 ];
 
 const ANALYZE = `Ты — психолог, специалист по теории привязанности (Боулби, Эйнсворт, Шейвер).
@@ -38,9 +38,12 @@ export const attachment: MethodologySpec = {
   id: "attachment",
   name: "Attachment Styles",
   ru: "Стили привязанности",
+  en: "Attachment Styles",
   category: "psychology",
   blurb:
     "Как человек ведёт себя в близости: надёжно, тревожно, избегающе или дезорганизованно. Лучшая призма для динамики отношений.",
+  blurbEn:
+    "How a person behaves in intimacy: secure, anxious, avoidant, or disorganized. The best prism for relationship dynamics.",
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     ATTACHMENT_AXES,

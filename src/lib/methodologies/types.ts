@@ -6,8 +6,10 @@ export interface MethodologySpec {
   id: string;
   name: string;
   ru: string;
+  en: string;
   category: Category;
   blurb: string;
+  blurbEn: string;
   analyzeSystemPrompt: string;
   analyzeTool: Anthropic.Messages.Tool;
   compareSystemPrompt: string;

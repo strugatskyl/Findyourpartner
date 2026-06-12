@@ -14,6 +14,7 @@ interface CompareRequestBody {
   methodology_id: string;
   self: ProfileData;
   partner: ProfileData;
+  lang?: "ru" | "en";
 }
 
 function isProfile(p: unknown): p is ProfileData {
@@ -59,7 +60,11 @@ export async function POST(req: NextRequest) {
       messages: [
         {
           role: "user",
-          content: `Профиль self (мой):\n${JSON.stringify(body.self.axes)}\nКраткое описание: ${body.self.summary}\n\nПрофиль partner (партнёр):\n${JSON.stringify(body.partner.axes)}\nКраткое описание: ${body.partner.summary}\n\nСоставь отчёт через инструмент ${methodology.compareTool.name}.`,
+          content: `Профиль self (мой):\n${JSON.stringify(body.self.axes)}\nКраткое описание: ${body.self.summary}\n\nПрофиль partner (партнёр):\n${JSON.stringify(body.partner.axes)}\nКраткое описание: ${body.partner.summary}\n\nСоставь отчёт через инструмент ${methodology.compareTool.name}. ${
+            body.lang === "en"
+              ? "Write all free-text fields (interpretations, strengths, risks, conversation starters, verdict) in English."
+              : "Пиши все свободные текстовые поля по-русски."
+          }`,
         },
       ],
     });

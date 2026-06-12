@@ -2,16 +2,16 @@ import type { MethodologySpec } from "./types";
 import { makeAnalyzeTool, makeCompareTool, type AxisDef } from "./shared-schema";
 
 export const ZOHAR_AXES: AxisDef[] = [
-  { key: "keter", ru: "Кетер · Воля", hint: "высшее намерение, скрытый импульс" },
-  { key: "chochmah", ru: "Хохма · Мудрость", hint: "вспышка интуиции, проницание" },
-  { key: "binah", ru: "Бина · Понимание", hint: "развёртывание идеи, аналитика" },
-  { key: "chesed", ru: "Хесед · Милосердие", hint: "щедрая отдача, безусловная любовь" },
-  { key: "gevurah", ru: "Гвура · Строгость", hint: "ограничение, дисциплина, граница" },
-  { key: "tiferet", ru: "Тиферет · Гармония", hint: "равновесие хесед и гвура, красота" },
-  { key: "netzach", ru: "Нецах · Стойкость", hint: "вечность, упорство, движущая сила" },
-  { key: "hod", ru: "Ход · Великолепие", hint: "благодарность, смирение, отклик" },
-  { key: "yesod", ru: "Йесод · Основание", hint: "связь, сексуальность, передача" },
-  { key: "malchut", ru: "Малхут · Царство", hint: "проявление, воплощение в мире" },
+  { key: "keter", ru: "Кетер · Воля", en: "Keter · Will", hint: "высшее намерение, скрытый импульс" },
+  { key: "chochmah", ru: "Хохма · Мудрость", en: "Chochmah · Wisdom", hint: "вспышка интуиции, проницание" },
+  { key: "binah", ru: "Бина · Понимание", en: "Binah · Understanding", hint: "развёртывание идеи, аналитика" },
+  { key: "chesed", ru: "Хесед · Милосердие", en: "Chesed · Kindness", hint: "щедрая отдача, безусловная любовь" },
+  { key: "gevurah", ru: "Гвура · Строгость", en: "Gevurah · Severity", hint: "ограничение, дисциплина, граница" },
+  { key: "tiferet", ru: "Тиферет · Гармония", en: "Tiferet · Harmony", hint: "равновесие хесед и гвура, красота" },
+  { key: "netzach", ru: "Нецах · Стойкость", en: "Netzach · Endurance", hint: "вечность, упорство, движущая сила" },
+  { key: "hod", ru: "Ход · Великолепие", en: "Hod · Splendor", hint: "благодарность, смирение, отклик" },
+  { key: "yesod", ru: "Йесод · Основание", en: "Yesod · Foundation", hint: "связь, сексуальность, передача" },
+  { key: "malchut", ru: "Малхут · Царство", en: "Malchut · Kingdom", hint: "проявление, воплощение в мире" },
 ];
 
 const ANALYZE = `Ты — толкователь учения каббалистической Книги Зоар. Используй 10 сфирот как ось профиля.
@@ -49,9 +49,12 @@ export const zohar: MethodologySpec = {
   id: "zohar",
   name: "Zohar / Sefirot",
   ru: "Зоар: 10 сфирот",
+  en: "Zohar: 10 Sefirot",
   category: "mysticism",
   blurb:
     "Древо сфирот из каббалистической Книги Зоар. 10 проявлений божественного света — от высшей воли (Кетер) до воплощения в мире (Малхут). Мистическая призма.",
+  blurbEn:
+    "The Tree of Sefirot from the kabbalistic Book of Zohar. 10 manifestations of divine light — from supreme will (Keter) to embodiment in the world (Malchut). A mystical prism.",
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     ZOHAR_AXES,

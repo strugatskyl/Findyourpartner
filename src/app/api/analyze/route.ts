@@ -23,6 +23,7 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const methodologyId = (formData.get("methodology_id") as string | null) ?? "";
     const text = (formData.get("text") as string | null) ?? "";
+    const lang = formData.get("lang") === "en" ? "en" : "ru";
     const imageFiles = formData.getAll("images") as File[];
 
     const methodology = getMethodology(methodologyId);
@@ -91,9 +92,14 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const langInstruction =
+      lang === "en"
+        ? "Write summary, quotes commentary and all free-text fields in English."
+        : "Пиши summary и все свободные текстовые поля по-русски.";
+
     userContent.push({
       type: "text",
-      text: `Проанализируй приведённые материалы и запиши профиль через инструмент ${methodology.analyzeTool.name}.`,
+      text: `Проанализируй приведённые материалы и запиши профиль через инструмент ${methodology.analyzeTool.name}. ${langInstruction}`,
     });
 
     const client = getClient();

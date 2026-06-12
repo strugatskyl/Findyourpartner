@@ -33,7 +33,27 @@ export function getAxes(id: string): AxisDef[] {
   return AXES_BY_ID[id] ?? [];
 }
 
-export function getAxisLabel(methodologyId: string, axisKey: string): string {
+export function getAxisLabel(
+  methodologyId: string,
+  axisKey: string,
+  lang: "ru" | "en" = "ru",
+): string {
   const axes = getAxes(methodologyId);
-  return axes.find((a) => a.key === axisKey)?.ru ?? axisKey;
+  const axis = axes.find((a) => a.key === axisKey);
+  if (!axis) return axisKey;
+  return lang === "en" ? axis.en : axis.ru;
+}
+
+export function getMethodologyName(
+  m: MethodologySpec,
+  lang: "ru" | "en",
+): string {
+  return lang === "en" ? m.en : m.ru;
+}
+
+export function getMethodologyBlurb(
+  m: MethodologySpec,
+  lang: "ru" | "en",
+): string {
+  return lang === "en" ? m.blurbEn : m.blurb;
 }

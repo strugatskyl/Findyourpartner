@@ -19,6 +19,7 @@ import type Anthropic from "@anthropic-ai/sdk";
 export interface AxisDef {
   key: string;
   ru: string;
+  en: string;
   hint?: string;
 }
 
@@ -69,7 +70,7 @@ export function makeAnalyzeTool(
         summary: {
           type: "string",
           description:
-            "Связное описание профиля в 3–5 предложениях. По-русски.",
+            "Связное описание профиля в 3–5 предложениях. На языке, указанном в запросе пользователя.",
         },
         quotes: {
           type: "array",
