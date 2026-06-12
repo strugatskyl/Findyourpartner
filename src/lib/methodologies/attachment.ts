@@ -44,6 +44,26 @@ export const attachment: MethodologySpec = {
     "Как человек ведёт себя в близости: надёжно, тревожно, избегающе или дезорганизованно. Лучшая призма для динамики отношений.",
   blurbEn:
     "How a person behaves in intimacy: secure, anxious, avoidant, or disorganized. The best prism for relationship dynamics.",
+  questions: {
+    ru: [
+      "Партнёр не отвечает на сообщения полдня. Что происходит у вас в голове и что вы делаете?",
+      "Как заканчивались ваши прошлые значимые отношения — кто уходил и почему?",
+      "Что вы чувствуете, когда партнёр говорит: «Нам нужно серьёзно поговорить об отношениях»?",
+      "Насколько вам легко просить близкого человека о помощи? Вспомните конкретный случай.",
+      "Бывало ли, что партнёр «душил» вас вниманием — или наоборот, был слишком далёким? Где для вас «слишком близко»?",
+      "Как вы ведёте себя после сильной ссоры: ищете контакт, ждёте шага от другого, уходите в себя?",
+      "Опишите ваши отношения с родителями в детстве — двумя-тремя предложениями, первое, что приходит.",
+    ],
+    en: [
+      "Your partner hasn't replied to messages for half a day. What goes through your head and what do you do?",
+      "How did your past significant relationships end — who left and why?",
+      "What do you feel when a partner says: 'We need to have a serious talk about us'?",
+      "How easy is it for you to ask someone close for help? Recall a specific moment.",
+      "Has a partner ever smothered you with attention — or felt too distant? Where is 'too close' for you?",
+      "How do you behave after a big fight: seek contact, wait for the other to make a move, withdraw?",
+      "Describe your childhood relationship with your parents — two or three sentences, whatever comes first.",
+    ],
+  },
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     ATTACHMENT_AXES,

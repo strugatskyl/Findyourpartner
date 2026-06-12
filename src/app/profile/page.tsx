@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import InputModeToggle, { type InputMode } from "@/components/InputModeToggle";
 import MethodologyPicker from "@/components/MethodologyPicker";
 import ProfileCard from "@/components/ProfileCard";
+import Questionnaire from "@/components/Questionnaire";
 import UploadArea from "@/components/UploadArea";
 import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
 import { useLang } from "@/lib/i18n";
@@ -21,6 +23,7 @@ export default function ProfilePage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState<"pick" | "upload" | "result">("pick");
+  const [inputMode, setInputMode] = useState<InputMode>("questions");
 
   useEffect(() => {
     if (!methodologyId) {
@@ -117,13 +120,25 @@ export default function ProfilePage() {
 
       {step === "upload" && methodologyId && (
         <>
-          <p className="text-sm text-[#f3ede4]/80">{t("uploadHint")}</p>
-          <UploadArea
-            onSubmit={handleAnalyze}
-            busy={busy}
-            cta={t("buildProfile")}
-            placeholder={t("selfPlaceholder")}
-          />
+          <InputModeToggle mode={inputMode} onChange={setInputMode} />
+          {inputMode === "questions" ? (
+            <Questionnaire
+              methodologyId={methodologyId}
+              onSubmit={handleAnalyze}
+              busy={busy}
+              cta={t("buildProfile")}
+            />
+          ) : (
+            <>
+              <p className="text-sm text-[#f3ede4]/80">{t("uploadHint")}</p>
+              <UploadArea
+                onSubmit={handleAnalyze}
+                busy={busy}
+                cta={t("buildProfile")}
+                placeholder={t("selfPlaceholder")}
+              />
+            </>
+          )}
         </>
       )}
 
@@ -153,12 +168,22 @@ export default function ProfilePage() {
             <summary className="cursor-pointer text-muted hover:text-accent">
               {t("recreateProfile")}
             </summary>
-            <div className="mt-4">
-              <UploadArea
-                onSubmit={handleAnalyze}
-                busy={busy}
-                cta={t("reanalyze")}
-              />
+            <div className="mt-4 flex flex-col gap-4">
+              <InputModeToggle mode={inputMode} onChange={setInputMode} />
+              {inputMode === "questions" ? (
+                <Questionnaire
+                  methodologyId={methodologyId}
+                  onSubmit={handleAnalyze}
+                  busy={busy}
+                  cta={t("reanalyze")}
+                />
+              ) : (
+                <UploadArea
+                  onSubmit={handleAnalyze}
+                  busy={busy}
+                  cta={t("reanalyze")}
+                />
+              )}
             </div>
           </details>
         </>

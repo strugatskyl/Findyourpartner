@@ -55,6 +55,32 @@ export const zohar: MethodologySpec = {
     "Древо сфирот из каббалистической Книги Зоар. 10 проявлений божественного света — от высшей воли (Кетер) до воплощения в мире (Малхут). Мистическая призма.",
   blurbEn:
     "The Tree of Sefirot from the kabbalistic Book of Zohar. 10 manifestations of divine light — from supreme will (Keter) to embodiment in the world (Malchut). A mystical prism.",
+  questions: {
+    ru: [
+      "Зачем вы живёте? Не «ради чего стараетесь», а что тянет вас вперёд, когда всё остальное отпадает?",
+      "Вспомните момент озарения — когда вы вдруг поняли что-то целиком, без рассуждений. Что это было?",
+      "Как вы принимаете трудные решения? Опишите последнее.",
+      "Когда вы в последний раз отдали что-то — время, деньги, силы — не ожидая ничего взамен?",
+      "Что вы запрещаете — себе и другим? Где проходит ваша граница «нет»?",
+      "Какие противоречия вы носите в себе? Как вам удаётся (или не удаётся) с ними жить?",
+      "Что вы продолжаете делать, несмотря на усталость и отсутствие видимого результата?",
+      "За что вы благодарны — прямо сейчас, сегодня?",
+      "Что для вас близость? Когда вы в последний раз чувствовали настоящую связь с человеком?",
+      "Опишите ваш дом — не стены, а то, что делает его именно вашим.",
+    ],
+    en: [
+      "Why do you live? Not 'what do you strive for,' but what pulls you forward when everything else falls away?",
+      "Recall a moment of insight — when you suddenly understood something whole, without reasoning. What was it?",
+      "How do you make hard decisions? Describe the most recent one.",
+      "When did you last give something — time, money, strength — expecting nothing in return?",
+      "What do you forbid — to yourself and to others? Where does your 'no' boundary run?",
+      "What contradictions do you carry inside? How do you manage (or fail) to live with them?",
+      "What do you keep doing despite exhaustion and no visible result?",
+      "What are you grateful for — right now, today?",
+      "What is intimacy to you? When did you last feel a true connection with another person?",
+      "Describe your home — not the walls, but what makes it truly yours.",
+    ],
+  },
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     ZOHAR_AXES,

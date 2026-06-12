@@ -50,6 +50,26 @@ export const astro: MethodologySpec = {
     "Стихии (огонь, земля, воздух, вода) и качества (кардинальная, фиксированная, мутабельная) — без даты рождения, по стилю и темам ваших текстов.",
   blurbEn:
     "Elements (fire, earth, air, water) and modalities (cardinal, fixed, mutable) — no birth date needed, inferred from the style and themes of your texts.",
+  questions: {
+    ru: [
+      "Что вас зажигает? После чего вы не можете уснуть от возбуждения?",
+      "Как вы относитесь к деньгам, телу, еде? Что из этого удовольствие, а что — обязанность?",
+      "О чём вы можете говорить часами? С кем и когда это было в последний раз?",
+      "Когда вы в последний раз плакали и почему?",
+      "Вспомните, что вы начинали с нуля. Как это было и что вас толкнуло?",
+      "Что вы делаете дольше всего в жизни, не бросая? Почему именно это?",
+      "Как вы переносите внезапные перемены планов? Опишите последний случай.",
+    ],
+    en: [
+      "What sets you on fire? After what can't you fall asleep from excitement?",
+      "How do you relate to money, body, food? Which of these is pleasure, and which is duty?",
+      "What can you talk about for hours? With whom, and when was the last time?",
+      "When did you last cry, and why?",
+      "Recall something you started from scratch. How was it, and what pushed you?",
+      "What have you been doing the longest in your life without quitting? Why that?",
+      "How do you handle sudden changes of plans? Describe the most recent case.",
+    ],
+  },
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     ASTRO_AXES,

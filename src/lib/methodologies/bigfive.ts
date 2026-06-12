@@ -44,6 +44,26 @@ export const bigfive: MethodologySpec = {
     "5 базовых черт личности: открытость, добросовестность, экстраверсия, доброжелательность, нейротизм. Самая исследованная модель в современной психологии.",
   blurbEn:
     "5 core personality traits: openness, conscientiousness, extraversion, agreeableness, neuroticism. The most researched model in modern psychology.",
+  questions: {
+    ru: [
+      "Как выглядят ваши идеальные выходные? Что новое вы попробовали за последний год?",
+      "Опишите ваш типичный план на день. Что происходит внутри вас, когда план срывается?",
+      "После шумной вечеринки вы чувствуете прилив сил или опустошение? Опишите подробнее.",
+      "Вспомните последний конфликт с близким человеком. Как вы себя вели и что чувствовали?",
+      "Что вас тревожит по ночам? Как часто это случается и как вы с этим справляетесь?",
+      "Что друзья сказали бы о вас за глаза — и хорошее, и то, что их раздражает?",
+      "Чем вы занимаетесь, когда никто не видит и ничего не надо делать?",
+    ],
+    en: [
+      "What does your ideal weekend look like? What new thing have you tried in the past year?",
+      "Describe your typical daily plan. What happens inside you when the plan falls apart?",
+      "After a loud party, do you feel energized or drained? Describe it in detail.",
+      "Recall your last conflict with someone close. How did you behave and what did you feel?",
+      "What keeps you up at night? How often does it happen and how do you cope?",
+      "What would your friends say about you behind your back — both the good and what annoys them?",
+      "What do you do when no one is watching and nothing needs to be done?",
+    ],
+  },
   analyzeSystemPrompt: ANALYZE,
   analyzeTool: makeAnalyzeTool(
     BIGFIVE_AXES,

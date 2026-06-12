@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import CompatibilityReportView from "@/components/CompatibilityReport";
+import InputModeToggle, { type InputMode } from "@/components/InputModeToggle";
 import MethodologyPicker from "@/components/MethodologyPicker";
 import ProfileCard from "@/components/ProfileCard";
+import Questionnaire from "@/components/Questionnaire";
 import UploadArea from "@/components/UploadArea";
 import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
 import { useLang } from "@/lib/i18n";
@@ -42,6 +44,7 @@ function CompareInner() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [inputMode, setInputMode] = useState<InputMode>("freetext");
 
   useEffect(() => {
     listMyMethodologies().then((ids) => {
@@ -210,13 +213,26 @@ function CompareInner() {
 
       {!report && (
         <>
-          <p className="text-sm text-[#f3ede4]/80">{t("partnerHint")}</p>
-          <UploadArea
-            onSubmit={analyzePartner}
-            busy={busy}
-            cta={t("analyzeCompare")}
-            placeholder={t("partnerPlaceholder")}
-          />
+          <p className="text-sm text-[#f3ede4]/80">
+            {t("questionnaireHintPartner")}
+          </p>
+          <InputModeToggle mode={inputMode} onChange={setInputMode} />
+          {inputMode === "questions" ? (
+            <Questionnaire
+              methodologyId={methodologyId}
+              onSubmit={analyzePartner}
+              busy={busy}
+              cta={t("analyzeCompare")}
+              showCopyButton
+            />
+          ) : (
+            <UploadArea
+              onSubmit={analyzePartner}
+              busy={busy}
+              cta={t("analyzeCompare")}
+              placeholder={t("partnerPlaceholder")}
+            />
+          )}
         </>
       )}
 

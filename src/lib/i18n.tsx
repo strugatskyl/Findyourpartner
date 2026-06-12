@@ -80,6 +80,21 @@ const DICT = {
     catPsychology: "Психология",
     catMysticism: "Мистика",
     needFirstProfile: "Сначала постройте свой профиль через эту методологию",
+    // questionnaire
+    modeQuestions: "📝 Ответить на вопросы",
+    modeFreeText: "📄 Свои тексты",
+    questionnaireHint:
+      "Отвечайте свободно, как пишете другу. Вопросы можно пропускать — но чем больше ответов, тем точнее профиль.",
+    questionnaireHintPartner:
+      "Партнёра можно оценить по его текстам и перепискам — или отправьте ему вопросы и вставьте его ответы сюда.",
+    answeredCount: "Отвечено: {a} из {n}",
+    copyQuestions: "📋 Скопировать вопросы для партнёра",
+    copied: "Скопировано! Отправьте партнёру",
+    questionnaireCopyHeader:
+      "Ответь, пожалуйста, на эти вопросы — свободно, своими словами:",
+    questionnaireSubmitHeader: "Ответы на анкету:",
+    questionLabel: "Вопрос",
+    answerLabel: "Ответ",
     // errors
     unknownError: "Неизвестная ошибка",
     errorGeneric: "Ошибка",
@@ -152,6 +167,21 @@ const DICT = {
     catPsychology: "Psychology",
     catMysticism: "Mysticism",
     needFirstProfile: "Build your own profile through this methodology first",
+    // questionnaire
+    modeQuestions: "📝 Answer questions",
+    modeFreeText: "📄 Paste texts",
+    questionnaireHint:
+      "Answer freely, like you're writing to a friend. You may skip questions — but the more answers, the more accurate the profile.",
+    questionnaireHintPartner:
+      "You can assess your partner from their texts and chats — or send them the questions and paste their answers here.",
+    answeredCount: "Answered: {a} of {n}",
+    copyQuestions: "📋 Copy questions for partner",
+    copied: "Copied! Send it to your partner",
+    questionnaireCopyHeader:
+      "Please answer these questions — freely, in your own words:",
+    questionnaireSubmitHeader: "Questionnaire answers:",
+    questionLabel: "Question",
+    answerLabel: "Answer",
     // errors
     unknownError: "Unknown error",
     errorGeneric: "Error",

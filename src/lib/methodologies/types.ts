@@ -10,6 +10,7 @@ export interface MethodologySpec {
   category: Category;
   blurb: string;
   blurbEn: string;
+  questions: { ru: string[]; en: string[] };
   analyzeSystemPrompt: string;
   analyzeTool: Anthropic.Messages.Tool;
   compareSystemPrompt: string;
