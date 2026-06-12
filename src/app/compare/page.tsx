@@ -10,11 +10,16 @@ import UploadArea from "@/components/UploadArea";
 import { METHODOLOGIES, getMethodologyName } from "@/lib/methodologies";
 import { useLang } from "@/lib/i18n";
 import {
+  deleteProfile,
+  deleteReport,
   listMyMethodologies,
   loadProfile,
+  loadReport,
+  saveProfile,
+  saveReport,
   type StoredProfile,
+  type StoredReport,
 } from "@/lib/profile-store";
-import type { ReportData } from "@/lib/methodologies/shared-schema";
 
 export default function ComparePage() {
   return (
@@ -22,12 +27,6 @@ export default function ComparePage() {
       <CompareInner />
     </Suspense>
   );
-}
-
-interface StoredReport {
-  methodology_id: string;
-  data: ReportData;
-  created_at: string;
 }
 
 function CompareInner() {
@@ -54,9 +53,24 @@ function CompareInner() {
   useEffect(() => {
     if (!methodologyId) {
       setSelf(null);
+      setPartner(null);
+      setReport(null);
       return;
     }
-    loadProfile("me", methodologyId).then((p) => setSelf(p));
+    let cancelled = false;
+    Promise.all([
+      loadProfile("me", methodologyId),
+      loadProfile("partner", methodologyId),
+      loadReport(methodologyId),
+    ]).then(([myProfile, partnerProfile, savedReport]) => {
+      if (cancelled) return;
+      setSelf(myProfile);
+      setPartner(partnerProfile);
+      setReport(savedReport);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [methodologyId]);
 
   async function analyzePartner(text: string, images: File[]) {
@@ -76,6 +90,7 @@ function CompareInner() {
 
       const partnerProfile = data.profile as StoredProfile;
       setPartner(partnerProfile);
+      await saveProfile("partner", methodologyId, partnerProfile);
 
       const cmpRes = await fetch("/api/compare", {
         method: "POST",
@@ -89,7 +104,9 @@ function CompareInner() {
       });
       const cmpData = await cmpRes.json();
       if (!cmpRes.ok) throw new Error(cmpData.error ?? t("compareError"));
-      setReport(cmpData.report as StoredReport);
+      const newReport = cmpData.report as StoredReport;
+      setReport(newReport);
+      await saveReport(methodologyId, newReport);
     } catch (e) {
       setError(e instanceof Error ? e.message : t("unknownError"));
     } finally {
@@ -97,10 +114,22 @@ function CompareInner() {
     }
   }
 
-  function reset() {
+  function resetLocal() {
     setPartner(null);
     setReport(null);
     setError(null);
+  }
+
+  async function checkAnother() {
+    setPartner(null);
+    setReport(null);
+    setError(null);
+    if (methodologyId) {
+      await Promise.all([
+        deleteProfile("partner", methodologyId),
+        deleteReport(methodologyId),
+      ]);
+    }
   }
 
   if (!loaded) return null;
@@ -162,7 +191,7 @@ function CompareInner() {
             type="button"
             onClick={() => {
               setMethodologyId(null);
-              reset();
+              resetLocal();
             }}
             className="mt-1 text-sm text-muted hover:text-accent"
           >
@@ -211,7 +240,7 @@ function CompareInner() {
           </div>
           <button
             type="button"
-            onClick={reset}
+            onClick={checkAnother}
             className="rounded-xl border border-muted/40 px-4 py-3 text-sm text-[#f3ede4] hover:border-accent"
           >
             {t("checkAnother")}

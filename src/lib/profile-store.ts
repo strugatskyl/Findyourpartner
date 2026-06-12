@@ -1,7 +1,7 @@
 "use client";
 
 import { openDB, type IDBPDatabase } from "idb";
-import type { ProfileData } from "./methodologies/shared-schema";
+import type { ProfileData, ReportData } from "./methodologies/shared-schema";
 
 const DB_NAME = "fyp";
 const STORE = "profiles";
@@ -12,6 +12,12 @@ export interface StoredProfile {
   data: ProfileData;
   created_at: string;
   label?: string;
+}
+
+export interface StoredReport {
+  methodology_id: string;
+  data: ReportData;
+  created_at: string;
 }
 
 let dbPromise: Promise<IDBPDatabase> | null = null;
@@ -65,6 +71,27 @@ export async function deleteProfile(
 ): Promise<void> {
   const db = await getDB();
   await db.delete(STORE, key(role, methodologyId));
+}
+
+export async function saveReport(
+  methodologyId: string,
+  report: StoredReport,
+): Promise<void> {
+  const db = await getDB();
+  await db.put(STORE, report, `report:${methodologyId}`);
+}
+
+export async function loadReport(
+  methodologyId: string,
+): Promise<StoredReport | null> {
+  const db = await getDB();
+  const result = await db.get(STORE, `report:${methodologyId}`);
+  return result ?? null;
+}
+
+export async function deleteReport(methodologyId: string): Promise<void> {
+  const db = await getDB();
+  await db.delete(STORE, `report:${methodologyId}`);
 }
 
 export async function clearAll(): Promise<void> {
