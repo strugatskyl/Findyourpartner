@@ -19,6 +19,41 @@ interface ReportActionsProps {
   partner: ProfileData;
 }
 
+const DARK_CSS = `
+  body { background:#0f0a1a; color:#f3ede4; font-family:Georgia,serif; max-width:680px; margin:0 auto; padding:24px; line-height:1.6; }
+  h1 { color:#d4a574; font-size:1.4rem; }
+  h2 { color:#d4a574; font-size:1.1rem; margin-top:2rem; }
+  .meta { color:#8a7a9a; font-size:.85rem; }
+  .score { font-size:4rem; color:#d4a574; text-align:center; margin:.5rem 0; }
+  .verdict { background:#1a1228; border-radius:14px; padding:16px; }
+  .axis { margin:.6rem 0; }
+  .axis-head { display:flex; justify-content:space-between; font-size:.9rem; }
+  .bar { height:8px; background:#0f0a1a; border:1px solid #2a2138; border-radius:99px; overflow:hidden; }
+  .fill { height:100%; background:#d4a574; }
+  ul { padding-left:1.2rem; }
+  li { margin:.4rem 0; }
+  .summary { color:#cfc7bb; font-size:.95rem; }
+  .delta { color:#8a7a9a; }
+`;
+
+const PRINT_CSS = `
+  @page { margin: 18mm; }
+  body { background:#ffffff; color:#1f1a14; font-family:Georgia,serif; max-width:680px; margin:0 auto; padding:24px; line-height:1.6; }
+  h1 { color:#8a5a2a; font-size:1.4rem; }
+  h2 { color:#8a5a2a; font-size:1.1rem; margin-top:2rem; page-break-after:avoid; }
+  .meta { color:#7a6f63; font-size:.85rem; }
+  .score { font-size:4rem; color:#8a5a2a; text-align:center; margin:.5rem 0; }
+  .verdict { background:#f6f0e7; border-radius:14px; padding:16px; }
+  .axis { margin:.6rem 0; page-break-inside:avoid; }
+  .axis-head { display:flex; justify-content:space-between; font-size:.9rem; }
+  .bar { height:8px; background:#fff; border:1px solid #d8cdbd; border-radius:99px; overflow:hidden; }
+  .fill { height:100%; background:#b07b3e; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  ul { padding-left:1.2rem; }
+  li { margin:.4rem 0; page-break-inside:avoid; }
+  .summary { color:#4a4138; font-size:.95rem; }
+  .delta { color:#7a6f63; }
+`;
+
 export default function ReportActions({
   methodologyId,
   report,
@@ -26,7 +61,6 @@ export default function ReportActions({
   partner,
 }: ReportActionsProps) {
   const { lang, t } = useLang();
-  const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
@@ -52,12 +86,6 @@ export default function ReportActions({
       "",
       report.verdict,
       "",
-      `${t("byAxes").toUpperCase()}:`,
-      ...report.axis_alignment.map((a) => {
-        const d = Math.round(a.delta);
-        return `• ${axisLabel(a.axis)}: ${d > 0 ? "+" : ""}${d} — ${a.interpretation}`;
-      }),
-      "",
       `${t("strengths").toUpperCase()}:`,
       ...report.strengths.map((s) => `• ${s}`),
       "",
@@ -66,16 +94,6 @@ export default function ReportActions({
       "",
       `${t("talkAbout").toUpperCase()}:`,
       ...report.conversation_starters.map((s) => `• ${s}`),
-      "",
-      `${t("yourProfileLabel").toUpperCase()}:`,
-      ...self.axes.map((a) => `${axisLabel(a.key)}: ${Math.round(a.score)}`),
-      "",
-      self.summary,
-      "",
-      `${t("partnerProfileLabel").toUpperCase()}:`,
-      ...partner.axes.map((a) => `${axisLabel(a.key)}: ${Math.round(a.score)}`),
-      "",
-      partner.summary,
     ];
     return lines.join("\n");
   }
@@ -103,30 +121,21 @@ export default function ReportActions({
     return items.map((i) => `<li>${esc(i)}</li>`).join("");
   }
 
-  function buildHtml(): string {
+  function buildHtml(theme: "dark" | "print"): string {
     const score = Math.round(report.overall_score);
+    const css = theme === "print" ? PRINT_CSS : DARK_CSS;
+    const autoprint =
+      theme === "print"
+        ? `<script>addEventListener("load",()=>setTimeout(()=>print(),400));</script>`
+        : "";
     return `<!doctype html>
 <html lang="${lang}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(t("reportTitle"))}</title>
-<style>
-  body { background:#0f0a1a; color:#f3ede4; font-family:Georgia,serif; max-width:680px; margin:0 auto; padding:24px; line-height:1.6; }
-  h1 { color:#d4a574; font-size:1.4rem; }
-  h2 { color:#d4a574; font-size:1.1rem; margin-top:2rem; }
-  .meta { color:#8a7a9a; font-size:.85rem; }
-  .score { font-size:4rem; color:#d4a574; text-align:center; margin:.5rem 0; }
-  .verdict { background:#1a1228; border-radius:14px; padding:16px; }
-  .axis { margin:.6rem 0; }
-  .axis-head { display:flex; justify-content:space-between; font-size:.9rem; }
-  .bar { height:8px; background:#0f0a1a; border:1px solid #2a2138; border-radius:99px; overflow:hidden; }
-  .fill { height:100%; background:#d4a574; }
-  ul { padding-left:1.2rem; }
-  li { margin:.4rem 0; }
-  .summary { color:#cfc7bb; font-size:.95rem; }
-  .delta { color:#8a7a9a; }
-</style>
+<style>${css}</style>
+${autoprint}
 </head>
 <body>
 <h1>${esc(t("reportTitle"))}</h1>
@@ -165,7 +174,9 @@ ${axisBarsHtml(partner)}
   }
 
   function handleDownload() {
-    const blob = new Blob([buildHtml()], { type: "text/html;charset=utf-8" });
+    const blob = new Blob([buildHtml("dark")], {
+      type: "text/html;charset=utf-8",
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -176,10 +187,13 @@ ${axisBarsHtml(partner)}
     URL.revokeObjectURL(url);
   }
 
-  async function handleCopy() {
-    await navigator.clipboard.writeText(buildText());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  function handlePdf() {
+    const blob = new Blob([buildHtml("print")], {
+      type: "text/html;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank");
+    setTimeout(() => URL.revokeObjectURL(url), 60_000);
   }
 
   async function handleShare() {
@@ -197,17 +211,17 @@ ${axisBarsHtml(partner)}
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
       <button
         type="button"
-        onClick={handleDownload}
+        onClick={handlePdf}
         className="rounded-xl border border-accent/50 px-4 py-3 text-sm text-[#f3ede4] hover:border-accent hover:bg-accent/10"
       >
-        {t("downloadReport")}
+        {t("savePdf")}
       </button>
       <button
         type="button"
-        onClick={handleCopy}
+        onClick={handleDownload}
         className="rounded-xl border border-muted/40 px-4 py-3 text-sm text-[#f3ede4] hover:border-accent"
       >
-        {copied ? t("reportCopied") : t("copyReport")}
+        {t("downloadReport")}
       </button>
       {canShare && (
         <button
