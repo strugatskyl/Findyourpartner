@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import PwaSetup from "@/components/PwaSetup";
 import { LangProvider } from "@/lib/i18n";
@@ -46,6 +47,7 @@ export default function RootLayout({
           </div>
           <PwaSetup />
         </LangProvider>
+        <Analytics />
       </body>
     </html>
   );
