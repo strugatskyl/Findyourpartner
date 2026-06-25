@@ -19,8 +19,22 @@ COLUMNS = [
     "unit_code", "tower", "floor", "model", "bedrooms", "bathrooms",
     "area_m2", "view", "price_usd", "price_basis", "parking", "storage",
     "balcony", "delivery", "status", "sale_date", "source", "source_url",
-    "contact", "notes",
+    "contact", "contact_phone", "contact_email", "notes",
 ]
+
+# Контакты по источнику/агентству (см. agents-contacts.md). Подставляются по
+# полю "source" к каждой строке, если у строки нет своих contact_phone/email.
+CONTACTS_BY_SOURCE = {
+    "Leona Raíces": ("+506 8810-4103", "ventaspl@puntaesmeraldacr.com"),
+    "Terraquea": ("+506 4052-5777 / +506 8538-9249", "info@terraquea.com"),
+    "Terraquea Beach Properties": ("+506 4052-5777 / +506 8538-9249", "info@terraquea.com"),
+    "RE/MAX Jaco Beach": ("+506 2643-4005 / +1 714-369-8263", ""),
+    "Pura Vida Rentals & Sales": ("+506 4702-4000 / +506 2637-1919", ""),
+    "Jaco Real Estate CR": ("", ""),
+    "Reservas Punta Esmeralda / застройщик": ("+506 8922-5050", "ventaspl@puntaesmeraldacr.com"),
+    "Constructora Edificar / застройщик": ("+506 8922-5050", "ventaspl@puntaesmeraldacr.com"),
+    "Сводно по проекту": ("+506 8922-5050", "ventaspl@puntaesmeraldacr.com"),
+}
 
 # Each row is a dict keyed by COLUMNS. Missing keys -> "".
 ROWS = [
@@ -211,7 +225,13 @@ ROWS = [
 
 
 def norm(row):
-    return {c: row.get(c, "") for c in COLUMNS}
+    out = {c: row.get(c, "") for c in COLUMNS}
+    phone, email = CONTACTS_BY_SOURCE.get(row.get("source", ""), ("", ""))
+    if not out.get("contact_phone"):
+        out["contact_phone"] = phone
+    if not out.get("contact_email"):
+        out["contact_email"] = email
+    return out
 
 
 def write_csv(path):
@@ -279,7 +299,8 @@ def write_xlsx(path):
         "bathrooms": 9, "area_m2": 10, "view": 10, "price_usd": 13,
         "price_basis": 11, "parking": 8, "storage": 8, "balcony": 8,
         "delivery": 11, "status": 16, "sale_date": 11, "source": 22,
-        "source_url": 50, "contact": 22, "notes": 60,
+        "source_url": 50, "contact": 20, "contact_phone": 26,
+        "contact_email": 28, "notes": 60,
     }
     for col_idx, name in enumerate(COLUMNS, start=1):
         ws.column_dimensions[get_column_letter(col_idx)].width = widths.get(name, 14)
@@ -312,7 +333,9 @@ def write_xlsx(path):
         ["sale_date", "Дата/период продажи (для status=sold)"],
         ["source", "Площадка-источник"],
         ["source_url", "Ссылка на объявление/источник"],
-        ["contact", "Контакт агента/застройщика"],
+        ["contact", "Имя агента / контактное лицо"],
+        ["contact_phone", "Телефон / WhatsApp агентства (см. agents-contacts.md)"],
+        ["contact_email", "Email агентства / отдела продаж"],
         ["notes", "Примечания, оговорки по достоверности"],
         ["", ""],
         ["ВАЖНО про цены продаж", "Индивидуальные цены сделок в Коста-Рике публично не раскрываются (нет публичного API; суммы в Registro Nacional часто занижены). Строки sold показывают оценку первичных цен застройщика, а не конкретные сделки."],

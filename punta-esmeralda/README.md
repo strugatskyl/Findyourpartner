@@ -15,6 +15,7 @@ Puntarenas, центральное тихоокеанское побережье
 |---|---|
 | `punta-esmeralda-apartments.xlsx` | Готовая **сортируемая таблица** с автофильтром, закреплённой шапкой и листом «Легенда». Открывайте в Excel / Google Sheets / Numbers. |
 | `punta-esmeralda-apartments.csv` | Те же данные в простом виде (импорт куда угодно). |
+| `agents-contacts.md` | **Контакты продавцов и листинг-агентов** по проекту (телефоны, WhatsApp, email, какие юниты ведёт каждое агентство). |
 
 ## Как сортировать и фильтровать
 
@@ -30,7 +31,7 @@ Puntarenas, центральное тихоокеанское побережье
 
 `unit_code, tower, floor, model, bedrooms, bathrooms, area_m2, view, price_usd,
 price_basis, parking, storage, balcony, delivery, status, sale_date, source,
-source_url, contact, notes`
+source_url, contact, contact_phone, contact_email, notes`
 
 Ключевые:
 - **status** — `available` (в продаже), `sold` (продано / первичка закрыта),
@@ -89,8 +90,17 @@ properstar.com, point2homes.com.
 
 ## Контакты по проекту
 
-- **Leona Raíces** — Cecilia Alberty, тел. **8810-4103**, www.leonaraices.com
-- Отдел продаж проекта — **ventaspl@puntaesmeraldacr.com**, +506 8922-5050
+Полный список агентств и агентов — в **`agents-contacts.md`**; телефоны/почты
+также продублированы в столбцах `contact_phone` / `contact_email` таблицы.
+
+- **Отдел продаж застройщика (напрямую)** — **+506 8922-5050**,
+  **ventaspl@puntaesmeraldacr.com**, Instagram @punta.esmeralda.cr
+- **Leona Raíces** — Cecilia Alberty, тел./WhatsApp **+506 8810-4103**,
+  www.leonaraices.com
+- **Terraquea** — +506 4052-5777 / 8538-9249, info@terraquea.com
+- **RE/MAX Oceanside (Jacó)** — +506 2643-4005 (Shawn Fletcher, Alexandra Kleinow)
+- **Pura Vida Rentals & Sales** — +506 4702-4000 / 2637-1919
+- **Jaco Real Estate CR** — Vanessa Angulo, jacorealestatecr.com/contact/
 
 ## Как пересобрать таблицу
 
